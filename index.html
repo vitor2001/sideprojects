@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Desafio de Envasamento — PEAD 20 L</title>
+  <style>
+    :root {
+      --bg: #f3f5f1;
+      --surface: #fff;
+      --ink: #13231a;
+      --muted: #607067;
+      --green: #167a42;
+      --green2: #2ca96c;
+      --orange: #d86d16;
+      --red: #c93636;
+      --line: #d9e1da;
+      --water: #42a9d8;
+      --shadow: 0 12px 34px #183f2818;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+    }
+
+    main {
+      max-width: 1050px;
+      margin: 28px auto;
+      padding: 28px;
+      background: var(--surface);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 20px;
+    }
+
+    h1 {
+      margin: 4px 0 8px;
+      font-size: 28px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 700;
+      letter-spacing: .09em;
+    }
+
+    .lead {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .status {
+      padding: 8px 12px;
+      border-radius: 99px;
+      background: #eaf7ef;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 28px;
+      margin-top: 26px;
+    }
+
+    .game {
+      min-height: 515px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(#f9fcfa, #edf5ef);
+    }
+
+    .machine {
+      height: 104px;
+      background: #d7e2da;
+      border-bottom: 7px solid #98aa9c;
+      position: relative;
+    }
+
+    .machine:before {
+      content: 'BICO DE ENVASE';
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: bold;
+      color: #4b5d50;
+    }
+
+    .nozzle {
+      position: absolute;
+      width: 52px;
+      height: 65px;
+      background: #798b80;
+      left: calc(50% - 26px);
+      bottom: -45px;
+      border-radius: 0 0 10px 10px;
+      border: 5px solid #5d6d62;
+    }
+
+    .stream {
+      display: none;
+      position: absolute;
+      top: 156px;
+      left: 50%;
+      width: 12px;
+      height: 156px;
+      transform: translateX(-50%);
+      background: var(--water);
+      border-radius: 10px;
+      opacity: .8;
+    }
+
+    .running .stream {
+      display: block;
+      animation: flow .28s infinite alternate;
+    }
+
+    @keyframes flow {
+      to {
+        width: 17px;
+        opacity: 1;
+      }
+    }
+
+    .bottle-wrap {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 330px;
+    }
+
+    .handle {
+      position: absolute;
+      right: 22px;
+      top: 41px;
+      width: 82px;
+      height: 105px;
+      border: 20px solid #d7e0e5;
+      border-left: 0;
+      border-radius: 0 28px 28px 0;
+      z-index: 0;
+    }
+
+    .bottle {
+      position: absolute;
+      left: 28px;
+      bottom: 0;
+      width: 230px;
+      height: 280px;
+      border: 9px solid #aebec8;
+      border-radius: 22px 22px 16px 16px;
+      background: #eef4f6cc;
+      overflow: hidden;
+      box-shadow: inset 0 0 18px #fff;
+      z-index: 1;
+    }
+
+    .bottle:before {
+      content: '';
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      top: 20px;
+      height: 11px;
+      border-top: 4px solid #c5d1d8;
+      border-bottom: 3px solid #c5d1d8;
+      z-index: 5;
+    }
+
+    .neck {
+      position: absolute;
+      left: 79px;
+      top: -44px;
+      width: 70px;
+      height: 58px;
+      border: 9px solid #aebec8;
+      border-bottom: 0;
+      border-radius: 10px 10px 0 0;
+      background: #eef4f6;
+    }
+
+    .neck:after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: -17px;
+      width: 47px;
+      height: 18px;
+      border-radius: 5px;
+      background: #3d5a4c;
+      border: 4px solid #2f4439;
+    }
+
+    .liquid {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 0;
+      background: linear-gradient(90deg, #238bc0, #55c2e9, #238bc0);
+      transition: height .08s linear;
+    }
+
+    .label {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      top: 112px;
+      background: #fff;
+      border: 2px solid #e1e7e9;
+      padding: 12px 7px;
+      text-align: center;
+      font-weight: 800;
+      color: #26734e;
+      z-index: 2;
+    }
+
+    .label small {
+      display: block;
+      color: #607067;
+      font-size: 9px;
+      letter-spacing: .07em;
+      margin-bottom: 4px;
+    }
+
+    .mark {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-top: 2px dashed var(--orange);
+      z-index: 3;
+    }
+
+    .mark span {
+      position: absolute;
+      left: calc(100% + 10px);
+      top: -10px;
+      color: var(--orange);
+      font-size: 11px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .scale {
+      position: absolute;
+      left: calc(50% + 120px);
+      bottom: 55px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .scale i {
+      display: block;
+      border-top: 1px solid #88978c;
+      width: 19px;
+      height: 27px;
+    }
+
+    .controls {
+      text-align: center;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 12px;
+    }
+
+    .space {
+      border: 0;
+      background: var(--green);
+      color: #fff;
+      border-radius: 7px;
+      padding: 13px 20px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 3px #0c552b;
+    }
+
+    .space:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .space[disabled] {
+      background: #8b9b91;
+      box-shadow: none;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 9px;
+    }
+
+    .side {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 17px;
+    }
+
+    .card h2 {
+      font-size: 13px;
+      margin: 0 0 11px;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    .money {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    .vpc {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--orange);
+    }
+
+    .metric {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .unit {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .range-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 11px 0;
+    }
+
+    .range-row strong {
+      font-size: 13px;
+    }
+
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--green);
+    }
+
+    .rules {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .rules b {
+      color: var(--ink);
+    }
+
+    #message {
+      display: none;
+      margin-top: 15px;
+      padding: 13px 15px;
+      border-radius: 9px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .success {
+      display: block !important;
+      background: #e6f6eb;
+      color: #176b3c;
+    }
+
+    .fail {
+      display: block !important;
+      background: #fdeaea;
+      color: #a52525;
+    }
+
+    .loss {
+      display: block !important;
+      background: #fff0e4;
+      color: #a64d08;
+    }
+
+    .reset {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 7px;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--ink);
+    }
+
+    @media (max-width: 760px) {
+      main {
+        margin: 0;
+        border-radius: 0;
+        padding: 18px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        gap: 10px;
+      }
+
+      .status {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <div class="eyebrow">SIMULAÇÃO DE ENVASE</div>
+        <h1>Desafio da embalagem PEAD 20 L</h1>
+        <p class="lead">Pare o enchimento exatamente no volume homologado.</p>
+      </div>
+      <div class="status">ALVO: 20,00 L</div>
+    </header>
+
+    <div class="layout">
+      <section class="game" id="game">
+        <div class="machine">
+          <div class="nozzle"></div>
+        </div>
+        <div class="stream"></div>
+        <div class="bottle-wrap">
+          <div class="handle"></div>
+          <div class="bottle">
+            <div class="neck"></div>
+            <div class="liquid" id="liquid"></div>
+            <div class="label">
+              <small>EMBALAGEM HOMOLOGADA</small>
+              PEAD<br>
+              <span style="font-size:24px">20 L</span>
+            </div>
+            <div class="mark" id="mark">
+              <span>20 L</span>
+            </div>
+          </div>
+        </div>
+        <div class="scale">
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+        <div class="controls">
+          <button class="space" id="play">▶ INICIAR (ESPAÇO)</button>
+          <div class="hint">Pressione <b>barra de espaço</b> para iniciar e parar</div>
+          <div id="message"></div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <div class="card">
+          <h2>VOLUME ATUAL</h2>
+          <div class="metric">
+            <span id="litres">0,00</span>
+            <span class="unit">L</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>VALOR PRODUZIDO</h2>
+          <div class="money" id="money">R$ 0,00</div>
+          <div class="unit">R$ 0,50 por litro</div>
+        </div>
+
+        <div class="card">
+          <h2>VPC · PERDA POR SOBREENVASE</h2>
+          <div class="vpc" id="vpc">R$ 0,00</div>
+          <div class="unit">Somente volume acima de 20 L</div>
+        </div>
+
+        <div class="card">
+          <h2>DIFICULDADE / VELOCIDADE</h2>
+          <div class="range-row">
+            <strong>Fluxo</strong>
+            <span id="speedLabel">7,00 L/s</span>
+          </div>
+          <input id="speed" type="range" min="2" max="18" step="0.5" value="7">
+          <div class="rules">
+            <b>Regras:</b><br>
+            • Faixa aceita: <b>19,90 a 20,10 L</b> (tolerância de ±0,5%).<br>
+            • Abaixo de 19,90 L: <b>Não conformidade regulatória</b>.<br>
+            • Acima de 20,10 L: o excedente é convertido em perda no indicador <b>VPC</b>.
+          </div>
+        </div>
+
+        <button class="reset" id="reset">↻ Nova tentativa</button>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const target = 20;
+    const tolerance = target * .005;
+    const rate = .5;
+
+    let l = 0;
+    let running = false;
+    let ended = false;
+    let last = 0;
+    let raf;
+
+    const $ = id => document.getElementById(id);
+    const fmt = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    function draw() {
+      $('litres').textContent = l.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      $('money').textContent = fmt(l * rate);
+      $('vpc').textContent = fmt(Math.max(0, l - target) * rate);
+
+      const fillMax = 24;
+      const innerHeight = 262;
+
+      $('liquid').style.height = Math.min(100, l / fillMax * 100) + '%';
+      $('mark').style.top = (innerHeight - (target / fillMax * innerHeight)) + 'px';
+    }
+
+    function tick(t) {
+      if (!running) return;
+
+      let dt = (t - last) / 1000;
+      last = t;
+      l += dt * parseFloat($('speed').value);
+      draw();
+      raf = requestAnimationFrame(tick);
+    }
+
+    function toggle() {
+      if (ended) {
+        reset();
+        return;
+      }
+
+      if (!running) {
+        running = true;
+        last = performance.now();
+        $('game').classList.add('running');
+        $('play').textContent = '■ PARAR (ESPAÇO)';
+        raf = requestAnimationFrame(tick);
+      } else {
+        running = false;
+        cancelAnimationFrame(raf);
+        $('game').classList.remove('running');
+        finish();
+      }
+    }
+
+    function finish() {
+      ended = true;
+      $('play').disabled = false;
+      $('play').textContent = '↻ REINICIAR (ESPAÇO)';
+
+      let m = $('message');
+      let delta = l - target;
+
+      if (Math.abs(delta) <= tolerance) {
+        m.className = 'success';
+        m.textContent = '✓ Volume dentro da tolerância homologada (20,00 L ± 0,10 L).';
+      } else if (l < target) {
+        m.className = 'fail';
+        m.textContent = '✕ Não conformidade regulatória — abaixo do limite de 19,90 L; faltaram ' + (target - l).toFixed(2) + ' L.';
+      } else {
+        m.className = 'loss';
+        m.textContent = '✕ Sobreenvase acima do limite de 20,10 L: ' + delta.toFixed(2) + ' L excedentes — perda VPC: ' + fmt(delta * rate) + '.';
+      }
+    }
+
+    function reset() {
+      cancelAnimationFrame(raf);
+
+      l = 0;
+      running = false;
+      ended = false;
+
+      $('play').disabled = false;
+      $('play').textContent = '▶ INICIAR (ESPAÇO)';
+      $('message').className = '';
+      $('message').textContent = '';
+      $('game').classList.remove('running');
+      draw();
+    }
+
+    $('play').onclick = toggle;
+    $('reset').onclick = reset;
+
+    $('speed').oninput = e =>
+      $('speedLabel').textContent =
+        parseFloat(e.target.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) + ' L/s';
+
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+
+    draw();
+  </script>
+</body>
+</html>
